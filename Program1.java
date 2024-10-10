@@ -19,6 +19,7 @@ class Program1{
         return new Result(0, 0, new int[0]);//replace with your own result
         
     }
+    
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();

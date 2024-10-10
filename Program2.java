@@ -23,7 +23,7 @@ class Program2{
 
             for (int j = i; j > 0; j--) {
                 currentWidth += widths[j - 1];
-                
+
                 if (currentWidth > w) break;
                 
                 currentMaxHeight = Math.max(currentMaxHeight, heights[j - 1]);
@@ -39,6 +39,7 @@ class Program2{
         int numPlatforms = platforms[n];
         int[] numPaintingsOnPlatform = new int[numPlatforms];
         int currentPainting = n;
+        
         for (int i = numPlatforms - 1; i >= 0; i--) {
             numPaintingsOnPlatform[i] = currentPainting - lastPlatform[currentPainting - 1];
             currentPainting = lastPlatform[currentPainting - 1];
