@@ -12,12 +12,39 @@ class Program2{
     * @return Result object containing the number of platforms, total height of the paintings and the number of paintings on each platform
     */
     private static Result program2(int n, int w, int[] heights, int[] widths) {
-        /************************
-         * ADD YOUR CODE HERE *
-         ***********************/
+        int[] dp = new int[n + 1];
+        int[] platforms = new int[n + 1];
+        int[] lastPlatform = new int[n];
 
-        // return new Result(0, 0, new int[0]);//replace with your own result
-        return new Result(n, 0, heights);
+        for (int i = 1; i <= n; i++) {
+            dp[i] = Integer.MAX_VALUE;
+            int currentWidth = 0;
+            int currentMaxHeight = 0;
+
+            for (int j = i; j > 0; j--) {
+                currentWidth += widths[j - 1];
+                
+                if (currentWidth > w) break;
+                
+                currentMaxHeight = Math.max(currentMaxHeight, heights[j - 1]);
+                
+                if (dp[i] > dp[j - 1] + currentMaxHeight) {
+                    dp[i] = dp[j - 1] + currentMaxHeight;
+                    platforms[i] = platforms[j - 1] + 1;
+                    lastPlatform[i - 1] = j - 1;
+                }
+            }
+        }
+
+        int numPlatforms = platforms[n];
+        int[] numPaintingsOnPlatform = new int[numPlatforms];
+        int currentPainting = n;
+        for (int i = numPlatforms - 1; i >= 0; i--) {
+            numPaintingsOnPlatform[i] = currentPainting - lastPlatform[currentPainting - 1];
+            currentPainting = lastPlatform[currentPainting - 1];
+        }
+
+        return new Result(numPlatforms, dp[n], numPaintingsOnPlatform);
     }
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
