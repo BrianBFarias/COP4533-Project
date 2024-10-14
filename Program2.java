@@ -28,18 +28,23 @@ class Program2{
 
         int i = 0;
 
-        // Front of Local Min
+        // First phase: process the paintings before the local minimum
         while (heights[i] > heights[i + 1]) {
+
+            // Check if current painting fits on platform
             if (currentWidth + widths[i] <= w) {
                 currentWidth += widths[i];
                 currentMaxHeight = Math.max(currentMaxHeight, heights[i]);
                 paintingsOnCurrentPlatform++;
 
-            } else {
+            } 
+            // create new platform
+            else {
                 totalHeight += currentMaxHeight;
                 numPaintingsOnPlatformFirstPhase[firstPhasePlatformCount] = paintingsOnCurrentPlatform;
                 firstPhasePlatformCount++;
 
+                // Start a new platform with the current painting
                 currentWidth = widths[i];
                 currentMaxHeight = heights[i];
                 paintingsOnCurrentPlatform = 1;
@@ -48,6 +53,8 @@ class Program2{
         }
 
         localMin = i;
+
+        // Check if local min painting fits on platform
         if (currentWidth + widths[i] <= w) {
             currentWidth += widths[i];
             currentMaxHeight = Math.max(currentMaxHeight, heights[i]);
@@ -55,6 +62,7 @@ class Program2{
             localMinProcessed = true;
         }
 
+        // Move to next platform for starting from back
         if (paintingsOnCurrentPlatform > 0) {
             totalHeight += currentMaxHeight;
             numPaintingsOnPlatformFirstPhase[firstPhasePlatformCount] = paintingsOnCurrentPlatform;
@@ -66,7 +74,9 @@ class Program2{
         paintingsOnCurrentPlatform = 0;
         i = n - 1;
 
+        // Second phase: process the paintings after the local minimum
         while (i >= localMin) {
+            // Check if current painting fits on platform
             if (currentWidth + widths[i] <= w) {
                 if (localMinProcessed && localMin == i) break;
 
@@ -74,11 +84,15 @@ class Program2{
                 currentMaxHeight = Math.max(currentMaxHeight, heights[i]);
                 paintingsOnCurrentPlatform++;
 
-            } else {
+            } 
+
+            // Create new platform
+            else {
                 totalHeight += currentMaxHeight;
                 numPaintingsOnPlatformSecondPhase[secondPhasePlatformCount] = paintingsOnCurrentPlatform;
                 secondPhasePlatformCount++;
 
+                // Start a new platform with the current painting
                 currentWidth = widths[i];
                 currentMaxHeight = heights[i];
                 paintingsOnCurrentPlatform = 1;
@@ -86,6 +100,7 @@ class Program2{
             i--;
         }
 
+        // Move to next platform for starting from back
         if (paintingsOnCurrentPlatform > 0) {
             totalHeight += currentMaxHeight;
             numPaintingsOnPlatformSecondPhase[secondPhasePlatformCount] = paintingsOnCurrentPlatform;
@@ -97,6 +112,7 @@ class Program2{
 
         System.arraycopy(numPaintingsOnPlatformFirstPhase, 0, finalPaintingsOnPlatforms, 0, firstPhasePlatformCount);
 
+        // flip final platforms order (reversed)
         for (int j = 0; j < secondPhasePlatformCount; j++) {
             finalPaintingsOnPlatforms[firstPhasePlatformCount + j] = numPaintingsOnPlatformSecondPhase[secondPhasePlatformCount - j - 1];
         }
